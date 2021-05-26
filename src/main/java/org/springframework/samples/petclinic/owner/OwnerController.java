@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.visit.VisitRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,13 +43,26 @@ class OwnerController {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerRepository owners;
-
 	private VisitRepository visits;
 
-	public OwnerController(OwnerRepository clinicService, VisitRepository visits) {
+//	1) 어노테이션 사용
+//	@Autowired
+//	private final PetRepository pet;
+
+//	2) 생성자 사용
+	private final PetRepository pet; //다른 레퍼런스로 바뀌지 않도록 보장하기 위해 final
+
+	public OwnerController(OwnerRepository clinicService, VisitRepository visits, PetRepository pet) {
 		this.owners = clinicService;
 		this.visits = visits;
+		this.pet = pet;
 	}
+
+//	3) setter사용 - 이 때는 pet에 final을 붙이면 안됨
+//	@Autowired
+//	public void setPetRepository(PetRepository pet){
+//		this.pet = pet;
+//	}
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
